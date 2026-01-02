@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> 2025 Logistics Engine </title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Consolas', 'Courier New', monospace;
+      overflow-x: hidden;
+    }
+
+    /* Cyber Grid Background */
+    .cyber-grid {
+      background-color: #0a0a0a;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      position: relative;
+    }
+
+    .cyber-grid::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Glassmorphism Effect */
+    .glass-panel {
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      box-shadow: 
+        0 8px 32px 0 rgba(0, 255, 255, 0.15),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+    }
+
+    /* Clean Color Classes */
+    .neon-cyan {
+      color: #00FFFF;
+      font-weight: 700;
+    }
+
+    .neon-pink {
+      color: #FF00FF;
+      font-weight: 700;
+    }
+
+    .neon-amber {
+      color: #FFA500;
+      font-weight: 700;
+    }
+
+    .glow-cyan-box {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .glow-pink-box {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .glow-amber-box {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Buttons */
+    .cyber-btn-cyan {
+      background: linear-gradient(135deg, #00FFFF 0%, #00CCCC 100%);
+      color: #0a0a0a;
+      padding: 1rem 2.5rem;
+      border: 2px solid #00FFFF;
+      border-radius: 8px;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .cyber-btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .cyber-btn-pink {
+      background: linear-gradient(135deg, #FF00FF 0%, #CC00CC 100%);
+      color: #0a0a0a;
+      padding: 1rem 2.5rem;
+      border: 2px solid #FF00FF;
+      border-radius: 8px;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .cyber-btn-pink:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .cyber-btn-outline {
+      background: transparent;
+      color: #00FFFF;
+      padding: 1rem 2.5rem;
+      border: 2px solid #00FFFF;
+      border-radius: 8px;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .cyber-btn-outline:hover {
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Animations */
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00FFFF, transparent);
+      animation: scan 3s linear infinite;
+      z-index: 10;
+    }
+
+    @keyframes scan {
+      0% { top: 0; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .pulse-glow {
+      /* Removed animation */
+    }
+
+    .float-animation {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Terminal */
+    .terminal-text {
+      font-family: 'Consolas', monospace;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .terminal-line {
+      opacity: 0;
+      animation: terminal-appear 0.5s ease-out forwards;
+    }
+
+    @keyframes terminal-appear {
+      to { opacity: 1; }
+    }
+
+    /* Mission Control Grid */
+    .mission-grid {
+      display: grid;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    /* Traffic Heatmap */
+    .heatmap-cell {
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .heatmap-cell:hover {
+      transform: scale(1.1);
+      z-index: 10;
+    }
+
+    /* Glowing Path Lines */
+    .path-glow {
+      filter: drop-shadow(0 0 10px #00FFFF);
+      animation: path-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes path-pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* Status Indicators */
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.5rem;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00FFFF;
+      border-radius: 5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .mission-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full cyber-grid" style="min-height: 100%; overflow-auto;"><!-- Header: Mission Control -->
+   <header class="glass-panel" style="position: sticky; top: 0; z-index: 100; padding: 1.5rem 0; margin: 1rem 2rem; border-radius: 12px;">
+    <nav style="max-width: 1600px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center;">
+     <div style="display: flex; align-items: center; gap: 1rem;">
+      <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+       <svg width="28" height="28" viewbox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /> <path d="M2 17L12 22L22 17" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /> <path d="M2 12L12 17L22 12" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+       </svg>
+      </div>
+      <div>
+       <div class="neon-cyan" style="font-size: 1.5rem; font-weight: 700; letter-spacing: 3px;">
+        OSMAN-PRO
+       </div>
+       <div class="neon-pink" style="font-size: 0.75rem; letter-spacing: 2px;">
+        CYBER-LOGISTICS
+       </div>
+      </div>
+     </div>
+     <div style="display: flex; gap: 2rem; align-items: center;"><a href="#features" style="color: #00FFFF; text-decoration: none; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px; transition: all 0.3s; text-transform: uppercase;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">FEATURES</a> <a href="#evolution" style="color: #00FFFF; text-decoration: none; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px; transition: all 0.3s; text-transform: uppercase;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">EVOLUTION</a> <a href="#performance" style="color: #00FFFF; text-decoration: none; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px; transition: all 0.3s; text-transform: uppercase;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">PERFORMANCE</a> <button class="cyber-btn-pink pulse-glow" style="font-size: 0.875rem;">LAUNCH</button>
+     </div>
+    </nav>
+   </header><!-- Hero Section: Command Center -->
+   <section style="padding: 4rem 2rem; position: relative;">
+    <div class="scan-line"></div>
+    <div style="max-width: 1600px; margin: 0 auto; position: relative; z-index: 1;">
+     <div style="text-align: center; margin-bottom: 3rem;">
+      <div style="display: inline-block; padding: 0.75rem 2rem; background: rgba(0, 255, 255, 0.1); border: 1px solid #00FFFF; border-radius: 50px; margin-bottom: 2rem;" class="glow-cyan-box"><span class="neon-cyan" style="font-size: 0.875rem; letter-spacing: 3px; text-transform: uppercase;">MISSION CONTROL ACTIVE</span>
+      </div>
+      <h1 id="hero-title" style="font-size: 4rem; font-weight: 900; color: #FFFFFF; margin-bottom: 1.5rem; line-height: 1.1; letter-spacing: 4px;"><span class="neon-cyan">OSMAN-PRO 2025</span><br><span class="neon-pink">CYBER-LOGISTICS ENGINE</span></h1>
+      <p id="hero-subtitle" style="font-size: 1.5rem; color: rgba(255, 255, 255, 0.8); max-width: 900px; margin: 0 auto 3rem; line-height: 1.6;">Priority-aware AI that transforms logistics optimization from 77 years to 0.48 microseconds</p>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;"><button id="cta-primary" class="cyber-btn-cyan">DEPLOY NOW</button> <button id="cta-secondary" class="cyber-btn-outline">VIEW DEMO</button>
+      </div>
+     </div><!-- Mission Control Dashboard -->
+     <div class="glass-panel glow-cyan-box" style="padding: 2rem; position: relative; overflow: hidden;">
+      <div class="scan-line"></div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;"><!-- Network Visualization -->
+       <div style="position: relative; height: 500px; background: rgba(0, 0, 0, 0.6); border-radius: 12px; border: 1px solid #00FFFF; overflow: hidden;">
+        <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;"><defs>
+          <filter id="glow">
+           <fegaussianblur stddeviation="4" result="coloredBlur" />
+           <femerge>
+            <femergenode in="coloredBlur" />
+            <femergenode in="SourceGraphic" />
+           </femerge>
+          </filter>
+          <lineargradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+           <stop offset="0%" style="stop-color:#00FFFF;stop-opacity:0" />
+           <stop offset="50%" style="stop-color:#00FFFF;stop-opacity:1" />
+           <stop offset="100%" style="stop-color:#00FFFF;stop-opacity:0" />
+          </lineargradient>
+          <lineargradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+           <stop offset="0%" style="stop-color:#FF00FF;stop-opacity:0" />
+           <stop offset="50%" style="stop-color:#FF00FF;stop-opacity:1" />
+           <stop offset="100%" style="stop-color:#FF00FF;stop-opacity:0" />
+          </lineargradient>
+         </defs> <!-- Grid Lines --> <line x1="0" y1="125" x2="100%" y2="125" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <line x1="0" y1="250" x2="100%" y2="250" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <line x1="0" y1="375" x2="100%" y2="375" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <line x1="200" y1="0" x2="200" y2="100%" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <line x1="400" y1="0" x2="400" y2="100%" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <line x1="600" y1="0" x2="600" y2="100%" stroke="rgba(0, 255, 255, 0.2)" stroke-width="1" /> <!-- Connection Paths - Cyan --> <path class="path-glow" d="M 100 100 L 300 150 L 500 120 L 700 180" stroke="url(#cyanGrad)" stroke-width="4" fill="none" filter="url(#glow)">
+          <animate attributename="stroke-dasharray" from="0,1000" to="1000,0" dur="3s" repeatcount="indefinite" />
+         </path> <path class="path-glow" d="M 150 300 L 350 250 L 600 280 L 800 320" stroke="url(#cyanGrad)" stroke-width="4" fill="none" filter="url(#glow)" style="animation-delay: 0.5s;">
+          <animate attributename="stroke-dasharray" from="0,1000" to="1000,0" dur="3s" repeatcount="indefinite" />
+         </path> <!-- Connection Paths - Pink --> <path class="path-glow" d="M 80 400 L 280 380 L 480 420 L 680 400" stroke="url(#pinkGrad)" stroke-width="4" fill="none" filter="url(#glow)" style="animation-delay: 1s;">
+          <animate attributename="stroke-dasharray" from="0,1000" to="1000,0" dur="3s" repeatcount="indefinite" />
+         </path> <path class="path-glow" d="M 200 150 L 400 300 L 550 200" stroke="url(#pinkGrad)" stroke-width="4" fill="none" filter="url(#glow)" style="animation-delay: 1.5s;">
+          <animate attributename="stroke-dasharray" from="0,1000" to="1000,0" dur="3s" repeatcount="indefinite" />
+         </path> <!-- Network Nodes --> <circle cx="100" cy="100" r="8" fill="#00FFFF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" />
+         </circle> <circle cx="300" cy="150" r="8" fill="#FF00FF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" begin="0.3s" />
+         </circle> <circle cx="500" cy="120" r="8" fill="#00FFFF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" begin="0.6s" />
+         </circle> <circle cx="700" cy="180" r="8" fill="#FF00FF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" begin="0.9s" />
+         </circle> <circle cx="350" cy="250" r="8" fill="#00FFFF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" begin="1.2s" />
+         </circle> <circle cx="600" cy="280" r="8" fill="#FF00FF" filter="url(#glow)">
+          <animate attributename="r" values="8;12;8" dur="2s" repeatcount="indefinite" begin="1.5s" />
+         </circle>
+        </svg><!-- Stats Overlays -->
+        <div style="position: absolute; top: 1rem; left: 1rem; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 8px; border: 1px solid #00FFFF;">
+         <div class="neon-cyan" style="font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 2px;">
+          NODES ACTIVE
+         </div>
+         <div style="color: #FFFFFF; font-size: 2rem; font-weight: 900;">
+          247
+         </div>
+        </div>
+        <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 8px; border: 1px solid #FF00FF;">
+         <div class="neon-pink" style="font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 2px;">
+          OPTIMIZATION
+         </div>
+         <div style="color: #FFFFFF; font-size: 2rem; font-weight: 900;">
+          99.7%
+         </div>
+        </div>
+        <div style="position: absolute; bottom: 1rem; left: 1rem; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); padding: 1rem 1.5rem; border-radius: 8px; border: 1px solid #00FFFF;">
+         <div class="neon-cyan" style="font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 2px;">
+          STATUS
+         </div>
+         <div style="color: #00FF00; font-size: 1rem; font-weight: 700;">
+          OPERATIONAL
+         </div>
+        </div>
+       </div><!-- System Metrics -->
+       <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="background: rgba(0, 0, 0, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid #00FFFF;">
+         <div class="neon-cyan" style="font-size: 0.875rem; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+          Priority Levels
+         </div>
+         <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+           <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;"><span style="color: #FF0000; font-size: 0.75rem; font-weight: 700;">P1 CRITICAL</span> <span style="color: #FFFFFF; font-size: 0.75rem;">12</span>
+           </div>
+           <div style="width: 100%; height: 8px; background: rgba(255, 0, 0, 0.2); border-radius: 4px; overflow: hidden;">
+            <div style="width: 85%; height: 100%; background: #FF0000;"></div>
+           </div>
+          </div>
+          <div>
+           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span style="color: #FFA500; font-size: 0.75rem; font-weight: 700;">P2 HIGH</span> <span style="color: #FFFFFF; font-size: 0.75rem;">28</span>
+           </div>
+           <div style="width: 100%; height: 8px; background: rgba(255, 165, 0, 0.2); border-radius: 4px; overflow: hidden;">
+            <div style="width: 70%; height: 100%; background: #FFA500;"></div>
+           </div>
+          </div>
+          <div>
+           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span style="color: #FFFF00; font-size: 0.75rem; font-weight: 700;">P3 MEDIUM</span> <span style="color: #FFFFFF; font-size: 0.75rem;">47</span>
+           </div>
+           <div style="width: 100%; height: 8px; background: rgba(255, 255, 0, 0.2); border-radius: 4px; overflow: hidden;">
+            <div style="width: 55%; height: 100%; background: #FFFF00;"></div>
+           </div>
+          </div>
+          <div>
+           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span style="color: #00FF00; font-size: 0.75rem; font-weight: 700;">P4 STANDARD</span> <span style="color: #FFFFFF; font-size: 0.75rem;">89</span>
+           </div>
+           <div style="width: 100%; height: 8px; background: rgba(0, 255, 0, 0.2); border-radius: 4px; overflow: hidden;">
+            <div style="width: 40%; height: 100%; background: #00FF00;"></div>
+           </div>
+          </div>
+          <div>
+           <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span style="color: #00FFFF; font-size: 0.75rem; font-weight: 700;">P5 LOW</span> <span style="color: #FFFFFF; font-size: 0.75rem;">71</span>
+           </div>
+           <div style="width: 100%; height: 8px; background: rgba(0, 255, 255, 0.2); border-radius: 4px; overflow: hidden;">
+            <div style="width: 30%; height: 100%; background: #00FFFF;"></div>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div style="background: rgba(0, 0, 0, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid #FF00FF;">
+         <div class="neon-pink" style="font-size: 0.875rem; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+          System Status
+         </div>
+         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">CPU Load</span> <span class="neon-cyan" style="font-size: 0.875rem;">23%</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between;"><span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Memory</span> <span class="neon-cyan" style="font-size: 0.875rem;">1.2GB</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between;"><span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Network</span> <span style="color: #00FF00; font-size: 0.875rem;">STABLE</span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between;"><span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Uptime</span> <span class="neon-pink" style="font-size: 0.875rem;">99.99%</span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Live Traffic Monitoring Section -->
+   <section id="features" style="padding: 4rem 2rem; position: relative;">
+    <div style="max-width: 1600px; margin: 0 auto;">
+     <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: 3px;"><span class="neon-amber">LIVE TRAFFIC</span> <span class="neon-cyan">MONITORING</span></h2>
+      <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8);">Real-time congestion detection with AI-powered alternate routing</p>
+     </div>
+     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;"><!-- Traffic Heatmap -->
+      <div class="glass-panel glow-cyan-box" style="padding: 2rem; position: relative;">
+       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 class="neon-cyan" style="font-size: 1.25rem; letter-spacing: 2px; text-transform: uppercase;">Traffic Density Grid</h3>
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+         <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 12px; height: 12px; background: #00FF00; border-radius: 2px;"></div><span style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem;">LOW</span>
+         </div>
+         <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 12px; height: 12px; background: #FFFF00; border-radius: 2px;"></div><span style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem;">MEDIUM</span>
+         </div>
+         <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 12px; height: 12px; background: #FFA500; border-radius: 2px;"></div><span style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem;">HIGH</span>
+         </div>
+         <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 12px; height: 12px; background: #FF0000; border-radius: 2px;"></div><span style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem;">CRITICAL</span>
+         </div>
+        </div>
+       </div>
+       <div style="background: rgba(0, 0, 0, 0.6); border-radius: 12px; padding: 1.5rem; position: relative; min-height: 450px;">
+        <div id="heatmap-grid" style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 0.5rem; height: 100%;"></div><!-- Alternate Path Overlay -->
+        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"><defs>
+          <filter id="pathGlow">
+           <fegaussianblur stddeviation="3" result="coloredBlur" />
+           <femerge>
+            <femergenode in="coloredBlur" />
+            <femergenode in="SourceGraphic" />
+           </femerge>
+          </filter>
+         </defs> <path d="M 50 100 L 150 150 L 250 120 L 350 180 L 450 150" stroke="#00FF00" stroke-width="5" fill="none" stroke-dasharray="10 5" filter="url(#pathGlow)">
+          <animate attributename="stroke-dashoffset" from="0" to="-15" dur="1s" repeatcount="indefinite" />
+         </path> <path d="M 80 300 L 180 280 L 280 320 L 380 300" stroke="#00FF00" stroke-width="5" fill="none" stroke-dasharray="10 5" filter="url(#pathGlow)">
+          <animate attributename="stroke-dashoffset" from="0" to="-15" dur="1s" repeatcount="indefinite" />
+         </path>
+        </svg>
+       </div>
+      </div><!-- Congestion Alerts -->
+      <div class="glass-panel glow-amber-box" style="padding: 2rem; border-color: #FFA500;">
+       <h3 class="neon-amber" style="font-size: 1.25rem; margin-bottom: 1.5rem; letter-spacing: 2px; text-transform: uppercase;">Congestion Zones</h3>
+       <div style="display: flex; flex-direction: column; gap: 1rem;"><!-- Critical Alert -->
+        <div style="background: rgba(255, 0, 0, 0.15); border: 2px solid #FF0000; border-radius: 8px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;"><span style="color: #FF0000; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px;">CRITICAL</span> <span class="status-dot" style="background: #FF0000;"></span>
+         </div>
+         <div style="color: #FFFFFF; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">
+          Highway 5A
+         </div>
+         <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin-bottom: 0.75rem;">
+          +428% Density Spike
+         </div>
+         <div style="background: rgba(0, 255, 0, 0.2); padding: 0.75rem; border-radius: 6px; border: 1px solid #00FF00;">
+          <div style="color: #00FF00; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+           ALTERNATE ROUTE
+          </div>
+          <div style="color: rgba(255, 255, 255, 0.8); font-size: 0.75rem;">
+           Route 7B → 12 min faster
+          </div>
+         </div>
+        </div><!-- Warning Alert -->
+        <div style="background: rgba(255, 165, 0, 0.15); border: 2px solid #FFA500; border-radius: 8px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;"><span style="color: #FFA500; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px;">WARNING</span> <span class="status-dot" style="background: #FFA500;"></span>
+         </div>
+         <div style="color: #FFFFFF; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">
+          Junction B-12
+         </div>
+         <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin-bottom: 0.75rem;">
+          +156% Wait Time
+         </div>
+         <div style="background: rgba(0, 255, 0, 0.2); padding: 0.75rem; border-radius: 6px; border: 1px solid #00FF00;">
+          <div style="color: #00FF00; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+           ALTERNATE ROUTE
+          </div>
+          <div style="color: rgba(255, 255, 255, 0.8); font-size: 0.75rem;">
+           Route 3C → 7 min faster
+          </div>
+         </div>
+        </div><!-- Moderate Alert -->
+        <div style="background: rgba(255, 255, 0, 0.15); border: 2px solid #FFFF00; border-radius: 8px; padding: 1.25rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;"><span style="color: #FFFF00; font-size: 0.875rem; font-weight: 700; letter-spacing: 2px;">MODERATE</span> <span class="status-dot" style="background: #FFFF00;"></span>
+         </div>
+         <div style="color: #FFFFFF; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">
+          Central District
+         </div>
+         <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin-bottom: 0.75rem;">
+          +89% Density
+         </div>
+         <div style="background: rgba(0, 255, 255, 0.2); padding: 0.75rem; border-radius: 6px; border: 1px solid #00FFFF;">
+          <div style="color: #00FFFF; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+           MONITORING
+          </div>
+          <div style="color: rgba(255, 255, 255, 0.8); font-size: 0.75rem;">
+           Auto-reroute standby
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Evolution Section -->
+   <section id="evolution" style="padding: 4rem 2rem; background: rgba(0, 0, 0, 0.4);">
+    <div style="max-width: 1600px; margin: 0 auto;">
+     <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 id="evolution-title" style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: 3px;"><span class="neon-cyan">STATIC</span> <span style="color: #FFFFFF;">VS</span> <span class="neon-pink">ADAPTIVE</span></h2>
+      <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8);">Beyond fixed decomposition: Real-time priority-aware intelligence</p>
+     </div>
+     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;"><!-- Traditional Method -->
+      <div class="glass-panel" style="padding: 2rem; border-color: rgba(255, 255, 255, 0.3);">
+       <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="display: inline-block; padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50px; margin-bottom: 1rem;"><span style="color: rgba(255, 255, 255, 0.8); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;">TRADITIONAL</span>
+        </div>
+        <h3 style="color: #FFFFFF; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Static Decomposition</h3>
+        <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.95rem;">Fixed clustering without priority</p>
+       </div>
+       <div style="background: rgba(0, 0, 0, 0.6); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; margin-bottom: 0.75rem; letter-spacing: 2px;">
+         ALGORITHM
+        </div>
+        <div class="terminal-text" style="color: rgba(255, 255, 255, 0.9);">
+         <div style="margin-bottom: 0.5rem;">
+          <span style="color: #999;">function</span> staticRoute(nodes):
+         </div>
+         <div style="margin-left: 1rem; margin-bottom: 0.5rem;">
+          clusters = divide(nodes, K)
+         </div>
+         <div style="margin-left: 1rem; margin-bottom: 0.5rem;">
+          <span style="color: #999;">for</span> cluster <span style="color: #999;">in</span> clusters:
+         </div>
+         <div style="margin-left: 2rem; margin-bottom: 0.5rem;">
+          bruteForce(cluster)
+         </div>
+         <div style="margin-left: 1rem;">
+          <span style="color: #999;">return</span> merge()
+         </div>
+        </div>
+       </div>
+       <div style="background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+        <div style="color: #FF0000; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 1px;">
+         COMPLEXITY
+        </div>
+        <div style="color: rgba(255, 255, 255, 0.9); font-size: 1rem;">
+         O(n² × k!) factorial
+        </div>
+       </div>
+       <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #FF0000; font-size: 1.25rem;">✗</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">No priority handling</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #FF0000; font-size: 1.25rem;">✗</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Fixed boundaries</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #FF0000; font-size: 1.25rem;">✗</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">No real-time adapt</span>
+        </div>
+       </div>
+      </div><!-- OSMAN-PRO Method -->
+      <div class="glass-panel glow-pink-box" style="padding: 2rem; border-color: #FF00FF;">
+       <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="display: inline-block; padding: 0.75rem 1.5rem; background: rgba(255, 0, 255, 0.2); border: 1px solid #FF00FF; border-radius: 50px; margin-bottom: 1rem;"><span class="neon-pink" style="font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;">OSMAN-PRO</span>
+        </div>
+        <h3 style="color: #FFFFFF; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Priority-Aware AI</h3>
+        <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.95rem;">Intelligent adaptive routing</p>
+       </div>
+       <div style="background: rgba(0, 0, 0, 0.6); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #FF00FF;">
+        <div class="neon-pink" style="font-size: 0.75rem; margin-bottom: 0.75rem; letter-spacing: 2px;">
+         ALGORITHM
+        </div>
+        <div class="terminal-text" style="color: rgba(255, 255, 255, 0.9);">
+         <div style="margin-bottom: 0.5rem;">
+          <span style="color: #FF00FF;">function</span> priorityRoute(nodes):
+         </div>
+         <div style="margin-left: 1rem; margin-bottom: 0.5rem;">
+          sorted = <span style="color: #00FFFF;">prioritySort</span>(nodes)
+         </div>
+         <div style="margin-left: 1rem; margin-bottom: 0.5rem;">
+          <span style="color: #FF00FF;">for</span> priority <span style="color: #FF00FF;">in</span> [1..5]:
+         </div>
+         <div style="margin-left: 2rem; margin-bottom: 0.5rem;">
+          <span style="color: #00FFFF;">adaptiveCluster</span>(p)
+         </div>
+         <div style="margin-left: 2rem; margin-bottom: 0.5rem;">
+          <span style="color: #00FFFF;">greedyOptimize</span>()
+         </div>
+         <div style="margin-left: 1rem;">
+          <span style="color: #FF00FF;">return</span> optimized
+         </div>
+        </div>
+       </div>
+       <div style="background: rgba(0, 255, 255, 0.1); border: 1px solid #00FFFF; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+        <div class="neon-cyan" style="font-size: 0.75rem; margin-bottom: 0.5rem; letter-spacing: 1px;">
+         COMPLEXITY
+        </div>
+        <div style="color: rgba(255, 255, 255, 0.9); font-size: 1rem;">
+         O(n log n) linear
+        </div>
+       </div>
+       <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #00FF00; font-size: 1.25rem;">✓</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">5-tier priority system</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #00FF00; font-size: 1.25rem;">✓</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Dynamic clustering</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #00FF00; font-size: 1.25rem;">✓</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">Real-time traffic AI</span>
+        </div>
+       </div>
+      </div>
+     </div><!-- Terminal Output -->
+     <div class="glass-panel glow-cyan-box" style="padding: 0; overflow: hidden; margin-top: 2rem;">
+      <div style="background: rgba(0, 255, 255, 0.1); padding: 1rem 1.5rem; border-bottom: 1px solid #00FFFF; display: flex; justify-content: space-between; align-items: center;">
+       <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display: flex; gap: 0.5rem;">
+         <div style="width: 12px; height: 12px; background: #FF0000; border-radius: 50%;"></div>
+         <div style="width: 12px; height: 12px; background: #FFFF00; border-radius: 50%;"></div>
+         <div style="width: 12px; height: 12px; background: #00FF00; border-radius: 50%;"></div>
+        </div><span id="terminal-title" class="neon-cyan" style="font-size: 0.875rem; letter-spacing: 2px;">EXECUTION TERMINAL</span>
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.5); font-size: 0.75rem;">
+        localhost:8080
+       </div>
+      </div>
+      <div style="background: rgba(0, 0, 0, 0.8); padding: 2rem; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.8;">
+       <div class="terminal-line" style="animation-delay: 0s;"><span style="color: #00FFFF;">[System]</span> <span style="color: rgba(255,255,255,0.8);">Initializing 20 Nodes...</span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 0.3s; margin-top: 0.5rem;"><span style="color: #FF00FF;">[Priority]</span> <span style="color: rgba(255,255,255,0.8);">Applying Priority Sort (O(n log n))...</span> <span style="color: #00FF00; font-weight: 700;">DONE</span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 0.6s; margin-top: 0.5rem;"><span style="color: #FFA500;">[Cluster]</span> <span style="color: rgba(255,255,255,0.8);">Decomposition Successful.</span> <span style="color: #00FFFF;">Time: <span style="color: #FFFFFF; font-weight: 700;">0.3023ms</span></span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 0.9s; margin-top: 0.5rem;"><span style="color: #00FF00;">[Routes]</span> <span style="color: rgba(255,255,255,0.8);">Optimized 247 routes. </span><span style="color: #00FF00; font-weight: 700;">99.7% efficiency</span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 1.2s; margin-top: 0.5rem;"><span style="color: #00FFFF;">[System]</span> <span style="color: rgba(255,255,255,0.8);">Traffic anomalies detected...</span> <span style="color: #FFA500; font-weight: 700;">3 zones</span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 1.5s; margin-top: 0.5rem;"><span style="color: #00FF00;">[Success]</span> <span style="color: rgba(255,255,255,0.8);">Engine ready. </span><span style="color: #FFFFFF; font-weight: 700;">Performance: 99.7%</span>
+       </div>
+       <div class="terminal-line" style="animation-delay: 1.8s; margin-top: 1rem;"><span style="color: #00FFFF;">&gt;</span> <span style="color: #FFFFFF;">_</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Performance Section -->
+   <section id="performance" style="padding: 4rem 2rem; position: relative;">
+    <div style="max-width: 1600px; margin: 0 auto;">
+     <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 id="performance-title" style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: 3px;"><span class="neon-pink">77 YEARS</span> <span style="color: #FFFFFF;">VS</span> <span class="neon-cyan">0.48 μs</span></h2>
+      <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8);">Revolutionary complexity reduction: 5 trillion times faster</p>
+     </div><!-- Stats Grid -->
+     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-bottom: 3rem;">
+      <div class="glass-panel" style="padding: 3rem; text-align: center; border-color: rgba(255, 0, 0, 0.5);">
+       <div style="color: rgba(255, 0, 0, 0.8); font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 3px; text-transform: uppercase;">
+        TRADITIONAL
+       </div>
+       <div style="font-size: 5rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.5rem; line-height: 1;">
+        77
+       </div>
+       <div style="font-size: 2rem; font-weight: 700; color: rgba(255, 255, 255, 0.8); margin-bottom: 1rem;">
+        YEARS
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; margin-bottom: 1rem;">
+        20! factorial operations
+       </div>
+       <div style="background: rgba(255, 0, 0, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255, 0, 0, 0.3);">
+        <div style="color: #FF0000; font-size: 1.5rem; font-weight: 700;">
+         2.43 × 10¹⁸
+        </div>
+        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin-top: 0.5rem;">
+         computations
+        </div>
+       </div>
+      </div>
+      <div class="glass-panel glow-cyan-box" style="padding: 3rem; text-align: center; border-color: #00FFFF;">
+       <div class="neon-cyan" style="font-size: 0.875rem; margin-bottom: 1rem; letter-spacing: 3px; text-transform: uppercase;">
+        OSMAN-PRO 2025
+       </div>
+       <div style="font-size: 5rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.5rem; line-height: 1;">
+        0.48
+       </div>
+       <div style="font-size: 2rem; font-weight: 700; color: rgba(255, 255, 255, 0.8); margin-bottom: 1rem;">
+        MICROSECONDS
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; margin-bottom: 1rem;">
+        Priority-aware AI optimization
+       </div>
+       <div style="background: rgba(0, 255, 255, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid #00FFFF;">
+        <div class="neon-cyan" style="font-size: 1.5rem;">
+         480
+        </div>
+        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin-top: 0.5rem;">
+         computations
+        </div>
+       </div>
+      </div>
+     </div><!-- Metrics Cards -->
+     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+      <div class="glass-panel glow-cyan-box" style="padding: 2rem; text-align: center; border-color: #00FFFF;">
+       <div class="neon-cyan" style="font-size: 0.875rem; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+        Speedup Factor
+       </div>
+       <div style="font-size: 2.5rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.5rem;">
+        5.07 × 10¹²x
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+        5 trillion times faster
+       </div>
+      </div>
+      <div class="glass-panel glow-pink-box" style="padding: 2rem; text-align: center; border-color: #FF00FF;">
+       <div class="neon-pink" style="font-size: 0.875rem; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+        Efficiency Gain
+       </div>
+       <div style="font-size: 2.5rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.5rem;">
+        99.9999%
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+        Computation reduction
+       </div>
+      </div>
+      <div class="glass-panel" style="padding: 2rem; text-align: center; border-color: #00FF00; box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);">
+       <div style="color: #00FF00; font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px #00FF00;">
+        Scalability
+       </div>
+       <div style="font-size: 2.5rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.5rem;">
+        10,000+
+       </div>
+       <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+        Nodes in real-time
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- AI Chatbot Section -->
+   <section style="padding: 4rem 2rem; background: rgba(0, 0, 0, 0.4);">
+    <div style="max-width: 1600px; margin: 0 auto;">
+     <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: 3rem; font-weight: 900; margin-bottom: 1rem; letter-spacing: 3px;"><span class="neon-cyan">GEMINI AI</span> <span class="neon-pink">LOGISTICS ASSISTANT</span></h2>
+      <p style="font-size: 1.25rem; color: rgba(255, 255, 255, 0.8);">Real-time routing intelligence powered by Google Gemini</p>
+     </div>
+     <div class="glass-panel glow-cyan-box" style="padding: 0; overflow: hidden; max-width: 1200px; margin: 0 auto;"><!-- Chat Header -->
+      <div style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.2) 0%, rgba(255, 0, 255, 0.2) 100%); padding: 1.5rem 2rem; border-bottom: 1px solid #00FFFF; display: flex; justify-content: space-between; align-items: center;">
+       <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);">
+         <svg width="24" height="24" viewbox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#0a0a0a" /> <path d="M2 17L12 22L22 17" fill="#0a0a0a" opacity="0.7" /> <path d="M2 12L12 17L22 12" fill="#0a0a0a" opacity="0.5" />
+         </svg>
+        </div>
+        <div>
+         <div class="neon-cyan" style="font-size: 1.125rem; font-weight: 700; letter-spacing: 2px;">
+          GEMINI AI
+         </div>
+         <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;"><span class="status-dot" style="background: #00FF00; width: 8px; height: 8px;"></span> <span>Online</span>
+         </div>
+        </div>
+       </div><button id="clear-chat" style="background: rgba(255, 0, 255, 0.2); color: #FF00FF; border: 1px solid #FF00FF; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;" onmouseover="this.style.background='rgba(255, 0, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 0, 255, 0.2)'">CLEAR</button>
+      </div><!-- Chat Messages -->
+      <div id="chat-messages" style="background: rgba(0, 0, 0, 0.8); padding: 2rem; height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem;"><!-- Welcome Message -->
+       <div style="display: flex; gap: 1rem; animation: terminal-appear 0.5s ease-out;">
+        <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><span style="color: #0a0a0a; font-weight: 900; font-size: 0.875rem;">AI</span>
+        </div>
+        <div style="flex: 1;">
+         <div style="background: rgba(0, 255, 255, 0.1); border: 1px solid #00FFFF; border-radius: 12px; padding: 1rem 1.25rem;">
+          <p style="color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; line-height: 1.6; margin: 0;">👋 Welcome to <span class="neon-cyan">Gemini AI Logistics Assistant</span>! I can help you with:</p>
+          <ul style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem; margin: 0.75rem 0 0 1.5rem; line-height: 1.8;">
+           <li>Route optimization queries</li>
+           <li>Traffic analysis and predictions</li>
+           <li>Priority scheduling recommendations</li>
+           <li>System performance insights</li>
+          </ul>
+         </div>
+         <div style="color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; margin-top: 0.5rem;">
+          Just now
+         </div>
+        </div>
+       </div>
+      </div><!-- Chat Input -->
+      <form id="chat-form" style="background: rgba(0, 0, 0, 0.9); padding: 1.5rem 2rem; border-top: 1px solid #00FFFF; display: flex; gap: 1rem; align-items: center;"><input type="text" id="chat-input" placeholder="Ask about routing, traffic, priorities..." style="flex: 1; background: rgba(20, 20, 20, 0.8); border: 1px solid #00FFFF; border-radius: 8px; padding: 1rem 1.5rem; color: #FFFFFF; font-family: 'Consolas', monospace; font-size: 0.95rem; outline: none; transition: all 0.3s;" onfocus="this.style.borderColor='#FF00FF'; this.style.boxShadow='0 0 12px rgba(255, 0, 255, 0.3)'" onblur="this.style.borderColor='#00FFFF'; this.style.boxShadow='none'"> <button type="submit" class="cyber-btn-cyan" style="padding: 1rem 2rem; white-space: nowrap;"> SEND </button>
+      </form>
+     </div><!-- API Key Notice -->
+     <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: rgba(255, 165, 0, 0.1); border: 1px solid #FFA500; border-radius: 12px; max-width: 1200px; margin-left: auto; margin-right: auto;">
+      <div class="neon-amber" style="font-size: 0.875rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 2px;">
+       ⚠️ API CONFIGURATION REQUIRED
+      </div>
+      <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem; margin: 0;">To enable AI responses, add your Gemini API key in the code. Get your free key at <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" style="color: #00FFFF; text-decoration: underline;">Google AI Studio</a></p>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer style="background: rgba(0, 0, 0, 0.9); border-top: 2px solid #00FFFF; padding: 3rem 2rem; margin-top: 4rem;">
+    <div style="max-width: 1600px; margin: 0 auto;">
+     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2rem;">
+      <div>
+       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%); border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"></div><span class="neon-cyan" style="font-size: 1.25rem; letter-spacing: 2px;">OSMAN-PRO</span>
+       </div>
+       <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; line-height: 1.6; max-width: 300px;">Next-generation cyber-logistics optimization powered by priority-aware AI. Breaking barriers since 2025.</p>
+      </div>
+      <div>
+       <div style="color: #00FFFF; font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+        Product
+       </div>
+       <div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Features</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Pricing</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Documentation</a>
+       </div>
+      </div>
+      <div>
+       <div style="color: #FF00FF; font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+        Company
+       </div>
+       <div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#FF00FF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#FF00FF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Careers</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#FF00FF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a>
+       </div>
+      </div>
+      <div>
+       <div style="color: #00FFFF; font-size: 0.875rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: 2px; text-transform: uppercase;">
+        Legal
+       </div>
+       <div style="display: flex; flex-direction: column; gap: 0.75rem;"><a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Privacy</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Terms</a> <a href="#" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.3s;" onmouseover="this.style.color='#00FFFF'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Security</a>
+       </div>
+      </div>
+     </div>
+     <div style="border-top: 1px solid rgba(0, 255, 255, 0.2); padding-top: 2rem; text-align: center;">
+      <p style="color: rgba(255,255,255,0.4); font-size: 0.875rem;">© 2025 Osman-Pro Technologies. Cyber-Logistics Command.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: '#0a0a0a',
+      surface_color: 'rgba(20, 20, 20, 0.6)',
+      text_color: '#ffffff',
+      primary_color: '#00FFFF',
+      secondary_color: '#FF00FF',
+      hero_title: 'OSMAN-PRO 2025 CYBER-LOGISTICS ENGINE',
+      hero_subtitle: 'Priority-aware AI that transforms logistics optimization from 77 years to 0.48 microseconds',
+      cta_primary: 'DEPLOY NOW',
+      cta_secondary: 'VIEW DEMO',
+      evolution_title: 'STATIC VS ADAPTIVE',
+      performance_title: '77 YEARS VS 0.48 μs',
+      terminal_title: 'EXECUTION TERMINAL'
+    };
+
+    async function onConfigChange(config) {
+      const heroTitle = config.hero_title || defaultConfig.hero_title;
+      const parts = heroTitle.split('CYBER-LOGISTICS');
+      if (parts.length > 1) {
+        document.getElementById('hero-title').innerHTML = `<span class="neon-cyan">${parts[0]}</span><br/><span class="neon-pink">CYBER-LOGISTICS${parts[1]}</span>`;
+      } else {
+        document.getElementById('hero-title').innerHTML = `<span class="neon-cyan">${heroTitle}</span>`;
+      }
+      
+      document.getElementById('hero-subtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      document.getElementById('cta-primary').textContent = config.cta_primary || defaultConfig.cta_primary;
+      document.getElementById('cta-secondary').textContent = config.cta_secondary || defaultConfig.cta_secondary;
+      
+      const evolutionTitle = config.evolution_title || defaultConfig.evolution_title;
+      const evolutionParts = evolutionTitle.split('VS');
+      if (evolutionParts.length > 1) {
+        document.getElementById('evolution-title').innerHTML = `<span class="neon-cyan">${evolutionParts[0]}</span><span style="color: #FFFFFF;">VS</span><span class="neon-pink">${evolutionParts[1]}</span>`;
+      } else {
+        document.getElementById('evolution-title').innerHTML = `<span class="neon-cyan">${evolutionTitle}</span>`;
+      }
+      
+      const performanceTitle = config.performance_title || defaultConfig.performance_title;
+      const perfParts = performanceTitle.split('VS');
+      if (perfParts.length > 1) {
+        document.getElementById('performance-title').innerHTML = `<span class="neon-pink">${perfParts[0]}</span><span style="color: #FFFFFF;">VS</span><span class="neon-cyan">${perfParts[1]}</span>`;
+      } else {
+        document.getElementById('performance-title').innerHTML = `<span class="neon-pink">${performanceTitle}</span>`;
+      }
+      
+      document.getElementById('terminal-title').textContent = config.terminal_title || defaultConfig.terminal_title;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+          ['cta_primary', config.cta_primary || defaultConfig.cta_primary],
+          ['cta_secondary', config.cta_secondary || defaultConfig.cta_secondary],
+          ['evolution_title', config.evolution_title || defaultConfig.evolution_title],
+          ['performance_title', config.performance_title || defaultConfig.performance_title],
+          ['terminal_title', config.terminal_title || defaultConfig.terminal_title]
+        ])
+      });
+    }
+
+    // Initialize traffic heatmap grid
+    const heatmapGrid = document.getElementById('heatmap-grid');
+    const heatmapData = [
+      2,1,1,2,3,4,5,5,4,3,
+      1,2,2,3,4,5,5,5,5,4,
+      1,1,3,4,5,5,4,4,3,2,
+      2,3,4,5,5,4,3,3,2,1,
+      3,4,5,5,4,3,2,2,1,1,
+      4,5,5,4,3,2,1,1,2,2,
+      3,4,4,3,2,1,1,2,3,3,
+      2,3,3,2,1,1,2,3,4,4
+    ];
+
+    heatmapData.forEach(intensity => {
+      const cell = document.createElement('div');
+      cell.className = 'heatmap-cell';
+      const colors = {
+        1: 'rgba(0, 255, 0, 0.3)',
+        2: 'rgba(255, 255, 0, 0.4)',
+        3: 'rgba(255, 165, 0, 0.5)',
+        4: 'rgba(255, 0, 0, 0.6)',
+        5: 'rgba(255, 0, 0, 0.8)'
+      };
+      cell.style.background = colors[intensity];
+      heatmapGrid.appendChild(cell);
+    });
+
+    // Chatbot functionality
+    const GEMINI_API_KEY = ''; // Add your Gemini API key here
+    const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const clearChatBtn = document.getElementById('clear-chat');
+
+    function addMessage(text, isUser = false, isError = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.style.cssText = 'display: flex; gap: 1rem; animation: terminal-appear 0.5s ease-out;';
+      
+      if (isUser) {
+        messageDiv.style.justifyContent = 'flex-end';
+      }
+
+      const avatar = document.createElement('div');
+      avatar.style.cssText = `width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.875rem;`;
+      
+      if (isUser) {
+        avatar.style.background = 'linear-gradient(135deg, #FF00FF 0%, #FFA500 100%)';
+        avatar.style.color = '#0a0a0a';
+        avatar.textContent = 'U';
+      } else {
+        avatar.style.background = 'linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%)';
+        avatar.style.color = '#0a0a0a';
+        avatar.textContent = 'AI';
+      }
+
+      const content = document.createElement('div');
+      content.style.flex = '1';
+      content.style.maxWidth = '70%';
+
+      const bubble = document.createElement('div');
+      bubble.style.cssText = 'border-radius: 12px; padding: 1rem 1.25rem;';
+      
+      if (isUser) {
+        bubble.style.background = 'rgba(255, 0, 255, 0.15)';
+        bubble.style.border = '1px solid #FF00FF';
+      } else if (isError) {
+        bubble.style.background = 'rgba(255, 0, 0, 0.15)';
+        bubble.style.border = '1px solid #FF0000';
+      } else {
+        bubble.style.background = 'rgba(0, 255, 255, 0.1)';
+        bubble.style.border = '1px solid #00FFFF';
+      }
+
+      const textContent = document.createElement('p');
+      textContent.style.cssText = 'color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; line-height: 1.6; margin: 0; white-space: pre-wrap;';
+      textContent.textContent = text;
+      bubble.appendChild(textContent);
+
+      const timestamp = document.createElement('div');
+      timestamp.style.cssText = 'color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; margin-top: 0.5rem;';
+      timestamp.textContent = new Date().toLocaleTimeString();
+
+      content.appendChild(bubble);
+      content.appendChild(timestamp);
+
+      if (isUser) {
+        messageDiv.appendChild(content);
+        messageDiv.appendChild(avatar);
+      } else {
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(content);
+      }
+
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addLoadingMessage() {
+      const loadingDiv = document.createElement('div');
+      loadingDiv.id = 'loading-message';
+      loadingDiv.style.cssText = 'display: flex; gap: 1rem; animation: terminal-appear 0.5s ease-out;';
+
+      const avatar = document.createElement('div');
+      avatar.style.cssText = 'width: 36px; height: 36px; background: linear-gradient(135deg, #00FFFF 0%, #FF00FF 100%); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #0a0a0a; font-weight: 900; font-size: 0.875rem;';
+      avatar.textContent = 'AI';
+
+      const content = document.createElement('div');
+      content.style.cssText = 'flex: 1; max-width: 70%;';
+
+      const bubble = document.createElement('div');
+      bubble.style.cssText = 'background: rgba(0, 255, 255, 0.1); border: 1px solid #00FFFF; border-radius: 12px; padding: 1rem 1.25rem;';
+
+      const dots = document.createElement('div');
+      dots.style.cssText = 'display: flex; gap: 0.5rem; align-items: center;';
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.style.cssText = `width: 8px; height: 8px; background: #00FFFF; border-radius: 50%; animation: blink 1.4s infinite; animation-delay: ${i * 0.2}s;`;
+        dots.appendChild(dot);
+      }
+      bubble.appendChild(dots);
+      content.appendChild(bubble);
+
+      loadingDiv.appendChild(avatar);
+      loadingDiv.appendChild(content);
+
+      chatMessages.appendChild(loadingDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeLoadingMessage() {
+      const loading = document.getElementById('loading-message');
+      if (loading) {
+        loading.remove();
+      }
+    }
+
+    async function sendToGemini(userMessage) {
+      if (!GEMINI_API_KEY) {
+        return 'Please configure your Gemini API key in the code to enable AI responses. Get your free API key at https://makersuite.google.com/app/apikey';
+      }
+
+      const systemContext = `You are an AI assistant for OSMAN-PRO 2025, a cutting-edge cyber-logistics optimization system. 
+      You help with:
+      - Route optimization and logistics planning
+      - Traffic analysis and congestion management
+      - Priority-based scheduling (P1-P5 system)
+      - Real-time routing decisions
+      - Performance metrics and system insights
+      
+      Keep responses concise, technical but friendly, and focused on logistics optimization.`;
+
+      try {
+        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `${systemContext}\n\nUser question: ${userMessage}`
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.7,
+              topK: 40,
+              topP: 0.95,
+              maxOutputTokens: 1024,
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+          return data.candidates[0].content.parts[0].text;
+        } else {
+          throw new Error('Invalid response format from API');
+        }
+      } catch (error) {
+        console.error('Gemini API Error:', error);
+        return `Error connecting to Gemini AI: ${error.message}. Please check your API key and internet connection.`;
+      }
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const userMessage = chatInput.value.trim();
+      if (!userMessage) return;
+
+      // Add user message
+      addMessage(userMessage, true);
+      chatInput.value = '';
+      chatInput.disabled = true;
+
+      // Show loading
+      addLoadingMessage();
+
+      // Get AI response
+      const aiResponse = await sendToGemini(userMessage);
+      
+      // Remove loading and add AI response
+      removeLoadingMessage();
+      addMessage(aiResponse, false, !GEMINI_API_KEY || aiResponse.includes('Error'));
+      
+      chatInput.disabled = false;
+      chatInput.focus();
+    });
+
+    clearChatBtn.addEventListener('click', () => {
+      // Clear all messages except the welcome message
+      const messages = chatMessages.children;
+      while (messages.length > 1) {
+        messages[messages.length - 1].remove();
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b7a0da3701290a4',t:'MTc2NzM1NDc3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
