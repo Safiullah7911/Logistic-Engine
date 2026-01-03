@@ -581,7 +581,7 @@
         <div style="display: flex; align-items: center; gap: 0.75rem;"><span style="color: #FF0000; font-size: 1.25rem;">✗</span> <span style="color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">No real-time adapt</span>
         </div>
        </div>
-      </div><!-- OSMAN-PRO Method -->
+      </div><!-- Method -->
       <div class="glass-panel glow-pink-box" style="padding: 2rem; border-color: #FF00FF;">
        <div style="text-align: center; margin-bottom: 2rem;">
         <div style="display: inline-block; padding: 0.75rem 1.5rem; background: rgba(255, 0, 255, 0.2); border: 1px solid #FF00FF; border-radius: 50px; margin-bottom: 1rem;"><span class="neon-pink" style="font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;">OSMAN-PRO</span>
@@ -861,9 +861,9 @@
 
     async function onConfigChange(config) {
       const heroTitle = config.hero_title || defaultConfig.hero_title;
-      const parts = heroTitle.split('CYBER-LOGISTICS');
+      const parts = heroTitle.split('LOGISTICS-ENGINE');
       if (parts.length > 1) {
-        document.getElementById('hero-title').innerHTML = `<span class="neon-cyan">${parts[0]}</span><br/><span class="neon-pink">CYBER-LOGISTICS${parts[1]}</span>`;
+        document.getElementById('hero-title').innerHTML = `<span class="neon-cyan">${parts[0]}</span><br/><span class="neon-pink">LOGISTIC-ENGINE{parts[1]}</span>`;
       } else {
         document.getElementById('hero-title').innerHTML = `<span class="neon-cyan">${heroTitle}</span>`;
       }
@@ -1092,7 +1092,7 @@
         return 'Please configure your Gemini API key in the code to enable AI responses. Get your free API key at https://makersuite.google.com/app/apikey';
       }
 
-      const systemContext = `You are an AI assistant for OSMAN-PRO 2025, a cutting-edge cyber-logistics optimization system. 
+      const systemContext = `You are an AI assistant for LOGISTIC ENGINE 2025, a cutting-edge cyber-logistics optimization system. 
       You help with:
       - Route optimization and logistics planning
       - Traffic analysis and congestion management
